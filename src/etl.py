@@ -1,8 +1,12 @@
 from dotenv import load_dotenv
 import os
 
+import json
+
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
+
+from utils.db import dbconnect
 
 def get_spotify_client():
     load_dotenv('.env')
@@ -15,13 +19,27 @@ def get_top_50_tracks():
     sp = get_spotify_client()
     playlist_items = sp.playlist('37i9dQZEVXbLRQDuF5jeBp')['tracks']['items']
 
-    for item in playlist_items:
-        item_id = item['track']['id']
-        song_name = item['track']['name']
-        artist_id = item['track']['artists'][0]['id']
-        artist_name = item['track']['artists'][0]['name']
-        artist_genre = sp.artist(artist_id)['genres']
-        track_popularity = item['track']['popularity']
-        artist_popularity = sp.artist(artist_id)['popularity']
-        print(item_id,song_name,artist_id,artist_name,artist_genre, track_popularity, artist_popularity)
-        #just use dataframe then connect to db
+    # data = []
+    # for item in playlist_items:
+    #     data.append({
+    #         'item_id': item['track']['id'],
+    #         'song_name': item['track']['name'],
+    #         'artist_id': item['track']['artists'][0]['id'],
+    #         'artist_name': item['track']['artists'][0]['name'],
+    #         'artist_genre': sp.artist(item['track']['artists'][0]['id'])['genres'],
+    #         'track_popularity': item['track']['popularity'],
+    #         'artist_popularity': sp.artist(item['track']['artists'][0]['id'])['popularity']
+    #     })
+
+    # json_data = json.dumps(data)
+
+    with dbconnect() as cur:
+        insert = '''
+                    INSERT INTO test(id)
+                    VALUES (%s)'''
+        value = (1,)
+        cur.execute(insert, value)
+
+get_top_50_tracks()
+
+#insert Spotify API data into local postgres. proof of concept

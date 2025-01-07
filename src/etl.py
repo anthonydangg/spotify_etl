@@ -39,12 +39,26 @@ def top_50_usa():
 
     json_data = json.dumps(data)
 
-def insert():
-    with dbconnect() as cur:
-        insert = '''
-                    INSERT INTO test(id)
-                    VALUES (%s)'''
-        value = (2,)
-        cur.execute(insert, value)
+def _get_song_insert_query():
+    return '''
+    INSERT INTO top_spotify.fact_rank(
+        item_id,
+        song_name,
+        track_popularity
+    )
+    VALUES (
+        %(item_id)s,
+        %(song_name)s,
+        %(track_popularity)s
+    );
+    '''
+
+# def insert():
+#     with dbconnect() as cur:
+#         insert = '''
+#                     INSERT INTO test(id)
+#                     VALUES (%s)'''
+#         value = (2,)
+#         cur.execute(insert, value)
 
 top_50_usa()

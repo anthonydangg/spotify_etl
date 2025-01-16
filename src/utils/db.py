@@ -1,35 +1,37 @@
 from contextlib import contextmanager
-from dataclasses import dataclass
+# from dataclasses import dataclass
+import os
 
 import psycopg2
 
-hostname = 'localhost'
-database = 'postgres'
-username = 'anthonydang'
-pwd = ''
-port_id = '5432'
+hostname = os.getenv('POSTGRES_HOST', '')
+db = os.getenv('POSTGRES_DB', '')
+username = os.getenv('POSTGRES_USER', '')
+pwd = os.getenv('POSTGRES_PASSWORD', '')
+port_id = os.getenv('POSTGRES_PORT', 5432)
 
 @contextmanager
 def dbconnect():
+    conn = None
+    cur = None
     try:
-        conn = psycopg2.connect( #can take in a string also
+        conn = psycopg2.connect(
             host = hostname,
-            dbname = database,
+            dbname = db,
             user = username,
             password = pwd,
             port = port_id)
+        print(conn.closed) # 0 if open
         cur = conn.cursor()
-        script = '''CREATE TABLE IF NOT EXISTS test(
-                                        id  int PRIMARY KEY)'''
-        cur.execute(script)
         yield cur
         conn.commit()
     except Exception as error:
-        print(error) 
-
+        print(f'Error: {error}') 
     finally:
-        cur.close()
-        conn.close()
+        if cur is not None:
+            cur.close()
+        if conn is not None:
+            conn.close()
 
 
 

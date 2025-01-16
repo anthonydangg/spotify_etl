@@ -20,7 +20,7 @@ CREATE TABLE top_spotify.track_artist
 
 CREATE TABLE top_spotify.artist
 (
-    artist_id VARCHAR(50),
+    artist_id VARCHAR(50) UNIQUE,
     artist_name VARCHAR(50),
     artist_popularity INT
 );

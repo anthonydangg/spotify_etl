@@ -1,13 +1,19 @@
 FROM python:3.10.2
 
+# Set the working directory inside the container
 WORKDIR /code
+
+# Set the PYTHONPATH environment variable
 ENV PYTHONPATH=/code/src
-#maybe unsure of env
 
-ADD ./containers/pipelinerunner/requirements.txt requirements.txt
-RUN pip install -r requirements.txt
+# Copy requirements.txt from the project root
+COPY containers/pipelinerunner/requirements.txt /code/requirements.txt
 
-COPY ./ /code/
-#applies where build directory is ran to paste into docker dir
+# Install Python dependencies
+RUN pip install -r /code/requirements.txt
 
-CMD ["python", "./src/etl.py"]
+# Copy the entire project directory into the container
+COPY . /code/
+
+# Run the ETL script
+CMD ["python", "/code/src/etl.py"]

@@ -107,7 +107,6 @@ def insert():
             track_artist = {
                 "item_id": row["item_id"],
                 "artist_id": row["artist_id"]
-                #add dup artist cause multiple track of same artist
             }
             artist = {
                 "artist_id": row["artist_id"],
@@ -118,10 +117,11 @@ def insert():
                 "artist_id": row["artist_id"],
                 "genre": row["genre"]
                 #have to fix by iterating through the list of genres
+                #also not all artist have genres
             }
             cur.execute(song_insert, fact)
             cur.execute(track_artist_insert, track_artist)
             cur.execute(artist_insert, artist)
-            # cur.execute(artist_genre_insert, artist_genre)
+            cur.execute(artist_genre_insert, artist_genre)
 
 insert()

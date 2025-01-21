@@ -10,6 +10,13 @@ from spotipy.oauth2 import SpotifyOAuth
 
 from utils.db import dbconnect
 
+from queries.queries import (
+    _get_song_insert_query,
+    _get_track_artist_insert_query,
+    _get_artist_insert_query,
+    _get_artist_genre_insert_query
+)
+
 def get_spotify_client():
     sp = spotipy.Spotify(auth_manager=SpotifyAnon())
 
@@ -27,7 +34,8 @@ def top_50_usa():
             'song_name': item['track']['name'],
             'artist_id': item['track']['artists'][0]['id'], #only takes the first artist. should account for features later
             'artist_name': item['track']['artists'][0]['name'],
-            'genre': sp.artist(item['track']['artists'][0]['id'])['genres'],
+            'genre': sp.artist(item['track']['artists'][0]['id'])['genres'][0] if 
+                sp.artist(item['track']['artists'][0]['id'])['genres'] else None,
             'track_popularity': item['track']['popularity'],
             'artist_popularity': sp.artist(item['track']['artists'][0]['id'])['popularity']
         })
@@ -35,75 +43,22 @@ def top_50_usa():
     data = json.dumps(data)
     return json.loads(data)
 
-def _get_song_insert_query():
-    return '''
-    INSERT INTO top_spotify.fact_rank(
-        item_id,
-        song_name,
-        artist_id,
-        track_popularity
-    )
-    VALUES (
-        %(item_id)s,
-        %(song_name)s,
-        %(artist_id)s,
-        %(track_popularity)s
-    );
-    '''
-
-def _get_track_artist_insert_query():
-    return '''
-    INSERT INTO top_spotify.track_artist(
-        item_id,
-        artist_id
-    )
-    VALUES (
-        %(item_id)s,
-        %(artist_id)s
-    );
-    '''
-
-def _get_artist_insert_query():
-    return '''
-    INSERT INTO top_spotify.artist(
-        artist_id,
-        artist_name,
-        artist_popularity
-    )
-    VALUES (
-        %(artist_id)s,
-        %(artist_name)s,
-        %(artist_popularity)s
-    ) ON CONFLICT (artist_id) DO NOTHING;
-    '''
-
-def _get_artist_genre_insert_query():
-    return '''
-    INSERT INTO top_spotify.artist_genres(
-        artist_id,
-        genre
-    )
-    VALUES (
-        %(artist_id)s,
-        %(genre)s
-    );
-    '''
-
 def insert():
     data = top_50_usa()
-    print(data)
     with dbconnect() as cur:
         song_insert = _get_song_insert_query()
         track_artist_insert = _get_track_artist_insert_query()
         artist_insert = _get_artist_insert_query()
         artist_genre_insert = _get_artist_genre_insert_query()
+        rank = 1
         for row in data:
             fact = {
                 "item_id": row["item_id"],
                 "song_name": row["song_name"],
-                "track_popularity": row["track_popularity"]
-                #add rank 
+                "track_popularity": row["track_popularity"],
+                "rank": rank
             }
+            rank += 1
             track_artist = {
                 "item_id": row["item_id"],
                 "artist_id": row["artist_id"]
@@ -116,12 +71,11 @@ def insert():
             artist_genre = {
                 "artist_id": row["artist_id"],
                 "genre": row["genre"]
-                #have to fix by iterating through the list of genres
-                #also not all artist have genres
             }
             cur.execute(song_insert, fact)
             cur.execute(track_artist_insert, track_artist)
             cur.execute(artist_insert, artist)
             cur.execute(artist_genre_insert, artist_genre)
+
 
 insert()

@@ -3,6 +3,7 @@ from contextlib import contextmanager
 import os
 
 import psycopg2
+import traceback
 
 hostname = os.getenv('POSTGRES_HOST', '')
 db = os.getenv('POSTGRES_DB', '')
@@ -27,6 +28,7 @@ def dbconnect():
         conn.commit()
     except Exception as error:
         print(f'Error: {error}') 
+        traceback.print_exc()
     finally:
         if cur is not None:
             cur.close()

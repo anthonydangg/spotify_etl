@@ -9,7 +9,8 @@ CREATE TABLE top_spotify.fact_rank
 (
     item_id VARCHAR(50),
     song_name VARCHAR(50),
-    track_popularity INT
+    track_popularity INT,
+    rank INT
 );
 
 CREATE TABLE top_spotify.track_artist
@@ -27,6 +28,6 @@ CREATE TABLE top_spotify.artist
 
 CREATE TABLE top_spotify.artist_genres
 (
-    artist_id VARCHAR(50),
+    artist_id VARCHAR(50) UNIQUE,
     genre VARCHAR(50)
 );

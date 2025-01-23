@@ -2,3 +2,4 @@ psycopg2
 spotipy
 spotipy-anon
 pytest
+pytest-mock

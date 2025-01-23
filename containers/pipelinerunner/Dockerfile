@@ -17,3 +17,8 @@ COPY . /code/
 
 # Run the ETL script
 CMD ["python", "/code/src/etl.py"]
+
+# Keep the container running
+# CMD ["tail", "-f", "/dev/null"]
+
+CMD ["pytest"]

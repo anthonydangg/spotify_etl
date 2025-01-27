@@ -1,26 +1,24 @@
+import json
 import os
 
-import json
-
 import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
 from spotipy_anon import SpotifyAnon
-from spotipy.oauth2 import SpotifyClientCredentials
-from spotipy.oauth2 import SpotifyOAuth
-
-
-from utils.db import dbconnect
 
 from queries.queries import (
+    _get_artist_genre_insert_query,
+    _get_artist_insert_query,
     _get_song_insert_query,
     _get_track_artist_insert_query,
-    _get_artist_insert_query,
-    _get_artist_genre_insert_query
 )
+from utils.db import dbconnect
+
 
 def get_spotify_client():
     sp = spotipy.Spotify(auth_manager=SpotifyAnon())
 
     return sp
+
 
 def top_50_usa():
     sp = get_spotify_client()
@@ -29,19 +27,29 @@ def top_50_usa():
 
     data = []
     for item in playlist_items:
-        data.append({
-            'item_id': item['track']['id'],
-            'song_name': item['track']['name'],
-            'artist_id': item['track']['artists'][0]['id'], #only takes the first artist. should account for features later
-            'artist_name': item['track']['artists'][0]['name'],
-            'genre': sp.artist(item['track']['artists'][0]['id'])['genres'][0] if 
-                sp.artist(item['track']['artists'][0]['id'])['genres'] else None,
-            'track_popularity': item['track']['popularity'],
-            'artist_popularity': sp.artist(item['track']['artists'][0]['id'])['popularity']
-        })
+        data.append(
+            {
+                'item_id': item['track']['id'],
+                'song_name': item['track']['name'],
+                'artist_id': item['track']['artists'][0][
+                    'id'
+                ],  # only takes the first artist. should account for features later
+                'artist_name': item['track']['artists'][0]['name'],
+                'genre': (
+                    sp.artist(item['track']['artists'][0]['id'])['genres'][0]
+                    if sp.artist(item['track']['artists'][0]['id'])['genres']
+                    else None
+                ),
+                'track_popularity': item['track']['popularity'],
+                'artist_popularity': sp.artist(
+                    item['track']['artists'][0]['id']
+                )['popularity'],
+            }
+        )
 
     data = json.dumps(data)
     return json.loads(data)
+
 
 def insert():
     data = top_50_usa()
@@ -56,21 +64,21 @@ def insert():
                 "item_id": row["item_id"],
                 "song_name": row["song_name"],
                 "track_popularity": row["track_popularity"],
-                "rank": rank
+                "rank": rank,
             }
             rank += 1
             track_artist = {
                 "item_id": row["item_id"],
-                "artist_id": row["artist_id"]
+                "artist_id": row["artist_id"],
             }
             artist = {
                 "artist_id": row["artist_id"],
                 "artist_name": row["artist_name"],
-                "artist_popularity": row["artist_popularity"]
+                "artist_popularity": row["artist_popularity"],
             }
             artist_genre = {
                 "artist_id": row["artist_id"],
-                "genre": row["genre"]
+                "genre": row["genre"],
             }
             cur.execute(song_insert, fact)
             cur.execute(track_artist_insert, track_artist)
@@ -78,4 +86,5 @@ def insert():
             cur.execute(artist_genre_insert, artist_genre)
 
 
-insert()
+if __name__ == "__main__":
+    insert()

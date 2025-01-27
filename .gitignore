@@ -9,3 +9,6 @@ venv.bak/
 
 # Notebook
 *.ipynb
+
+#cron
+cron_runner

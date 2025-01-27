@@ -3,3 +3,7 @@ spotipy
 spotipy-anon
 pytest
 pytest-mock
+isort
+black
+flake8
+mypy

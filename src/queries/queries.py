@@ -14,6 +14,7 @@ def _get_song_insert_query():
     );
     '''
 
+
 def _get_track_artist_insert_query():
     return '''
     INSERT INTO top_spotify.track_artist(
@@ -25,6 +26,7 @@ def _get_track_artist_insert_query():
         %(artist_id)s
     );
     '''
+
 
 def _get_artist_insert_query():
     return '''
@@ -39,6 +41,7 @@ def _get_artist_insert_query():
         %(artist_popularity)s
     ) ON CONFLICT (artist_id) DO NOTHING;
     '''
+
 
 def _get_artist_genre_insert_query():
     return '''

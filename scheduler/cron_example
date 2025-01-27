@@ -1,0 +1,3 @@
+SHELL=/bin/bash
+HOME=/
+*/5 * * * * POSTGRES_USER=anthony POSTGRES_PASSWORD=supersecretpassword POSTGRES_DB=spotify_db POSTGRES_HOST=db POSTGRES_PORT=5432  PYTHONPATH=/code/src /usr/local/bin/python /code/src/etl.py

@@ -31,7 +31,7 @@ RUN crontab /etc/cron.d/cron_runner
 RUN touch /var/log/cron.log
 
 # Run the cron job/ETL script
-CMD cron && tail -f /var/log/cron.log
+CMD /usr/local/bin/python /code/src/etl.py && cron && tail -f /var/log/cron.log
 
 # Run the ETL script
 # CMD ["python", "/code/src/etl.py"]

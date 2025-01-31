@@ -4,13 +4,15 @@ def _get_song_insert_query():
         item_id,
         song_name,
         track_popularity,
-        rank
+        rank,
+        created_at
     )
     VALUES (
         %(item_id)s,
         %(song_name)s,
         %(track_popularity)s,
-        %(rank)s
+        %(rank)s,
+        %(created_at)s
     );
     '''
 

@@ -12,3 +12,6 @@ venv.bak/
 
 #cron
 cron_runner
+
+#pem
+*.pem

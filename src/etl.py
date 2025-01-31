@@ -1,5 +1,6 @@
 import json
 import os
+from datetime import datetime
 
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
@@ -65,6 +66,7 @@ def insert():
                 "song_name": row["song_name"],
                 "track_popularity": row["track_popularity"],
                 "rank": rank,
+                "created_at": datetime.now()
             }
             rank += 1
             track_artist = {

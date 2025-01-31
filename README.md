@@ -20,7 +20,7 @@ The official Spotify Charts doesn't give you much information besides the rankin
 
 1. In `etl.py`, the data is pulled from the Spotify API, transformed, and inserted into a PostgreSQL database. 
 2. The database connection setup is in `db.py`.
-3. The data is separated into tables: `fact_rank`, `track_artist`, `artist`, and `artist_genres`. The schemas can be found at `1-create-schema.sql`.
+3. The data is separated into tables: `fact_rank`, `track_artist`, `artist`, and `artist_genres`. The schemas can be found at `1-create-schema.sql` and a data model can be found in the images folder.
 4. The pipeline results are tested in `test_etl_integration.py` using pytest.
 5. The dashboard is setup in Metabase. The queries for the visualizations can be found at `dashboard_queries.sql`.
 6. The above steps are containarized by Docker and deployed to an AWS EC2 instance.

@@ -34,7 +34,7 @@ def top_50_usa():
                 'song_name': item['track']['name'],
                 'artist_id': item['track']['artists'][0][
                     'id'
-                ],  # only takes the first artist. should account for features later
+                ],
                 'artist_name': item['track']['artists'][0]['name'],
                 'genre': (
                     sp.artist(item['track']['artists'][0]['id'])['genres'][0]

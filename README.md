@@ -4,7 +4,7 @@ Data pipeline that extracts the top songs from the Spotify API using Python, Pos
 
 ## Objective
 
-The official Spotify Charts doesn't give you much information besides the ranking of certain songs. This project aims to give more insightful information about music trends through an interactive dashboard and by keeping track of the charts for longer periods of time. The pipeline calls the Spotify API every day at 3 pm (when Spotify updates their metrics) to extract the Spotify charts, load the data into a database, and apply transformations for visualizations in a dashboard. The project is hosted on AWS and the dashboard can be viewed [here](http://54.197.74.226:3000/public/dashboard/65928e71-3423-43f9-8445-0bacef1a393a).
+The official Spotify Charts doesn't give you much information besides the ranking of certain songs. This project aims to give more insightful information about music trends through an interactive dashboard and by keeping track of the charts for longer periods of time. The pipeline calls the Spotify API every day at 3 pm (when Spotify updates their metrics) to extract the Spotify charts, load the data into a database, and apply transformations for visualizations in a dashboard. The project is hosted on AWS and the dashboard can be viewed [~~here~~](http://54.197.74.226:3000/public/dashboard/65928e71-3423-43f9-8445-0bacef1a393a). _AWS Instance paused to not incur cost_
 
 ## Tools & Technologies
 
@@ -27,7 +27,7 @@ The official Spotify Charts doesn't give you much information besides the rankin
 
 ## Dashboard
 
-See the live dashboard [here](http://54.197.74.226:3000/public/dashboard/65928e71-3423-43f9-8445-0bacef1a393a)
+See the live dashboard [~~here~~](http://54.197.74.226:3000/public/dashboard/65928e71-3423-43f9-8445-0bacef1a393a). _AWS Instance paused to not incur cost_
 ![dashboard_1](images/dashboard_1.png)
 ![dashboard_2](images/dashboard_2.png)
 ![dashboard_3](images/dashboard_3.png)
